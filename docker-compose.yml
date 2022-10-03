@@ -4,6 +4,9 @@ services:
   app:
     build: .
     depends_on:
+      postgres:
+        condition: service_healthy
+    links:
       - postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -14,7 +17,8 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - .:/app
+      - ./src:/app/src
+      - ./test:/app/test
 
   postgres:
     image: postgres:14
