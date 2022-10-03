@@ -9,6 +9,8 @@ host = os.environ["POSTGRES_HOST"]
 port = os.environ["POSTGRES_PORT"]
 database = os.environ["POSTGRES_DB"]
 
-SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+SQLALCHEMY_DATABASE_URI = (
+    f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+)
 
 db = SQLAlchemy()
