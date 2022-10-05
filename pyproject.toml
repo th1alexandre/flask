@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "flask"
+name = "flask_template"
 version = "0.1.0"
 description = "flask project template"
 authors = ["Th1Alexandre <th1alexandre.dev@gmail.com>"]
@@ -7,6 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+Flask = "^2.2.2"
+flask-sqlalchemy = "^3.0.0"
+flasgger = "^0.9.5"
 
 
 [build-system]
