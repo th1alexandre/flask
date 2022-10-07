@@ -22,3 +22,21 @@ ENV POETRY_NO_INTERACTION=1 \
 ENV PYSETUP_PATH=/opt/pysetup \
     VENV_PATH=/opt/pysetup/.venv \
     PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+
+
+## Building stage, installs poetry and dependencies
+FROM python-base as poetry-builder
+
+# Installs essential tools for building poetry
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        curl build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry, respects $POETRY_VERSION and $POETRY_HOME
+RUN curl -sSL https://install.python-poetry.org | python
+
+# Cache requirements and installs only main dependencies
+WORKDIR $PYSETUP_PATH
+COPY ./poetry.lock ./pyproject.toml ./
+RUN poetry install --only main
