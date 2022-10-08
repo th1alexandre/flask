@@ -66,3 +66,24 @@ EXPOSE 5000
 
 # Run flask in development mode, debug true
 ENTRYPOINT poetry run python -u src/main.py
+
+
+# Pre-production stage, installs prod dependencies
+# uses psycopg instead of psycopg-binary
+FROM python-base as pre-production
+
+# Installs essential tools for building psycopg
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        libpq-dev gcc \
+        python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Poetry and pre-build main dependencies
+COPY --from=poetry-builder $POETRY_HOME $POETRY_HOME
+COPY --from=poetry-builder $PYSETUP_PATH $PYSETUP_PATH
+
+WORKDIR $PYSETUP_PATH
+
+# Installs production dependencies
+RUN poetry install --only prod
