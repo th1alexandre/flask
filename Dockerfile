@@ -43,19 +43,29 @@ COPY ./poetry.lock ./pyproject.toml ./
 RUN poetry install --only main
 
 
-# Development stage, installs dev dependencies
-FROM python-base as development
-ENV DEBUG=True
+# Pre-development stage, installs prod dependencies
+FROM python-base as pre-development
 
 # Copy Poetry and pre-build main dependencies
 COPY --from=poetry-builder $POETRY_HOME $POETRY_HOME
-COPY --from=poetry-builder $PYSETUP_PATH $APP_PATH
+COPY --from=poetry-builder $PYSETUP_PATH $PYSETUP_PATH
+
+WORKDIR $PYSETUP_PATH
+
+# Installs development dependencies
+RUN poetry install --only prod
+
+
+# Development final stage
+FROM python-base as development
+ENV DEBUG=True
+
+# Copy Poetry and pre-build development dependencies
+COPY --from=pre-development $POETRY_HOME $POETRY_HOME
+COPY --from=pre-development $PYSETUP_PATH $APP_PATH
 
 # Required to bind docker-compose volumes
 WORKDIR $APP_PATH
-
-# Installs development dependencies
-RUN poetry install --only dev
 
 # Copy all files to container, .dockerignore
 # should be used to avoid copying unnecessary files
