@@ -19,7 +19,8 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=true
 
 # Other envs
-ENV PYSETUP_PATH=/opt/pysetup \
+ENV APP_PATH=/app \
+    PYSETUP_PATH=/opt/pysetup \
     VENV_PATH=/opt/pysetup/.venv \
     PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
@@ -40,3 +41,28 @@ RUN curl -sSL https://install.python-poetry.org | python
 WORKDIR $PYSETUP_PATH
 COPY ./poetry.lock ./pyproject.toml ./
 RUN poetry install --only main
+
+
+# Development stage, installs dev dependencies
+FROM python-base as development
+ENV DEBUG=True
+
+# Copy Poetry and pre-build main dependencies
+COPY --from=poetry-builder $POETRY_HOME $POETRY_HOME
+COPY --from=poetry-builder $PYSETUP_PATH $APP_PATH
+
+# Required to bind docker-compose volumes
+WORKDIR $APP_PATH
+
+# Installs development dependencies
+RUN poetry install --only dev
+
+# Copy all files to container, .dockerignore
+# should be used to avoid copying unnecessary files
+COPY . .
+
+# Flask app port
+EXPOSE 5000
+
+# Run flask in development mode, debug true
+ENTRYPOINT poetry run python -u src/main.py
