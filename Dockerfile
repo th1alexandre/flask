@@ -87,3 +87,24 @@ WORKDIR $PYSETUP_PATH
 
 # Installs production dependencies
 RUN poetry install --only prod
+
+
+# Production stage
+FROM python-base as production
+ENV DEBUG=False
+
+# Copy Poetry and pre-build production dependencies
+COPY --from=pre-production $POETRY_HOME $POETRY_HOME
+COPY --from=pre-production $PYSETUP_PATH $APP_PATH
+
+# Required to bind docker-compose volumes
+WORKDIR $APP_PATH
+
+# Copy only source code for production
+COPY ./src /app/src
+
+# Flask app port
+EXPOSE 5000
+
+# Run flask in production mode, debug false
+ENTRYPOINT poetry run python -u src/main.py
