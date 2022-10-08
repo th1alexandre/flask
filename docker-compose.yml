@@ -2,7 +2,10 @@ version: "3.9"
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
     depends_on:
       postgres:
         condition: service_healthy
