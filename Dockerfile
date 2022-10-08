@@ -1,4 +1,4 @@
-## Base stage, set environment variables
+### Base stage, load environment variables
 FROM python:3.10-slim-bullseye as python-base
 
 # Python envs
@@ -25,7 +25,7 @@ ENV APP_PATH=/app \
     PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
 
-## Building stage, installs poetry and dependencies
+### Building stage, installs poetry and main dependencies
 FROM python-base as poetry-builder
 
 # Installs essential tools for building poetry
@@ -43,7 +43,7 @@ COPY ./poetry.lock ./pyproject.toml ./
 RUN poetry install --only main
 
 
-# Pre-development stage, installs prod dependencies
+### Pre-development stage, installs dev dependencies
 FROM python-base as pre-development
 
 # Copy Poetry and pre-build main dependencies
@@ -53,10 +53,10 @@ COPY --from=poetry-builder $PYSETUP_PATH $PYSETUP_PATH
 WORKDIR $PYSETUP_PATH
 
 # Installs development dependencies
-RUN poetry install --only prod
+RUN poetry install --only dev
 
 
-# Development final stage
+### Development final stage
 FROM python-base as development
 ENV DEBUG=True
 
@@ -78,11 +78,10 @@ EXPOSE 5000
 ENTRYPOINT poetry run python -u src/main.py
 
 
-# Pre-production stage, installs prod dependencies
-# uses psycopg instead of psycopg-binary
+### Pre-production stage, installs prod dependencies
 FROM python-base as pre-production
 
-# Installs essential tools for building psycopg
+# Installs essential tools for building psycopg[c]
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
         libpq-dev gcc \
@@ -99,7 +98,7 @@ WORKDIR $PYSETUP_PATH
 RUN poetry install --only prod
 
 
-# Production stage
+### Production final stage
 FROM python-base as production
 ENV DEBUG=False
 
