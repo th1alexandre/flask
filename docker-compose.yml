@@ -21,7 +21,7 @@ services:
       - 5000:5000
     volumes:
       - ./src:/app/src
-      - ./test:/app/test
+      - ./tests:/app/tests
 
   postgres:
     image: postgres:14
