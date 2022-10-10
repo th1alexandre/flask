@@ -58,7 +58,6 @@ RUN poetry install --only dev
 
 ### Development final stage
 FROM python-base as development
-ENV DEBUG=True
 
 # Copy Poetry and pre-build development dependencies
 COPY --from=pre-development $POETRY_HOME $POETRY_HOME
@@ -100,7 +99,6 @@ RUN poetry install --only prod
 
 ### Production final stage
 FROM python-base as production
-ENV DEBUG=False
 
 # Copy Poetry and pre-build production dependencies
 COPY --from=pre-production $POETRY_HOME $POETRY_HOME
