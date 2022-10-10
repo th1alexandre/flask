@@ -31,8 +31,7 @@ FROM python-base as poetry-builder
 # Installs essential tools for building poetry
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-        curl build-essential \
-    && rm -rf /var/lib/apt/lists/*
+        curl build-essential
 
 # Install Poetry, respects $POETRY_VERSION and $POETRY_HOME
 RUN curl -sSL https://install.python-poetry.org | python
@@ -44,12 +43,9 @@ RUN poetry install --only main
 
 
 ### Pre-development stage, installs dev dependencies
-FROM python-base as pre-development
+FROM poetry-builder as pre-development
 
-# Copy Poetry and pre-build main dependencies
-COPY --from=poetry-builder $POETRY_HOME $POETRY_HOME
-COPY --from=poetry-builder $PYSETUP_PATH $PYSETUP_PATH
-
+# Have cache for main dependencies
 WORKDIR $PYSETUP_PATH
 
 # Installs development dependencies
@@ -78,19 +74,15 @@ ENTRYPOINT poetry run python -u src/main.py
 
 
 ### Pre-production stage, installs prod dependencies
-FROM python-base as pre-production
+FROM poetry-builder as pre-production
 
 # Installs essential tools for building psycopg[c]
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
         libpq-dev gcc \
-        python3-dev \
-    && rm -rf /var/lib/apt/lists/*
+        python3-dev
 
-# Copy Poetry and pre-build main dependencies
-COPY --from=poetry-builder $POETRY_HOME $POETRY_HOME
-COPY --from=poetry-builder $PYSETUP_PATH $PYSETUP_PATH
-
+# Have cache for main dependencies
 WORKDIR $PYSETUP_PATH
 
 # Installs production dependencies
