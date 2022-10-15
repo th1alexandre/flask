@@ -1,5 +1,6 @@
+from flasgger import LazyJSONEncoder, LazyString, Swagger
+
 from flask import Flask, request
-from flasgger import Swagger, LazyString, LazyJSONEncoder
 
 
 def initialize_flasgger(app: Flask):

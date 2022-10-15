@@ -1,13 +1,10 @@
 import os
+
 import psycopg
 
 
 def _connect_pg(
-    user: str,
-    password: str,
-    host: str,
-    port: int,
-    database: str
+    user: str, password: str, host: str, port: int, database: str
 ) -> psycopg.Connection:
     """Connect to a PostgreSQL database.
 
@@ -23,11 +20,7 @@ def _connect_pg(
     """
     try:
         return psycopg.connect(
-            user=user,
-            password=password,
-            host=host,
-            port=port,
-            database=database
+            user=user, password=password, host=host, port=port, database=database
         )
     except Exception as e:
         raise Exception(f"Error connecting to PostgreSQL: {e}")
@@ -54,11 +47,7 @@ def conn_default() -> psycopg.Connection:
         database = os.getenv("POSTGRES_DB", "flask")
 
         conn = _connect_pg(
-            user=user,
-            password=password,
-            host=host,
-            port=int(port),
-            database=database
+            user=user, password=password, host=host, port=int(port), database=database
         )
         return conn
     except Exception as e:

@@ -1,9 +1,7 @@
 import os
 
 from flask import Flask
-
 from swagger import initialize_flasgger
-
 
 app = Flask(__name__)
 
