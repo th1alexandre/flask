@@ -1,5 +1,4 @@
-import os
-
+from config import FlaskConfig
 from flask import Flask
 from swagger import initialize_flasgger
 
@@ -9,11 +8,6 @@ swagger = initialize_flasgger(app)
 
 
 if __name__ == "__main__":
-    DEBUG = os.getenv("FLASK_DEBUG", "False") == "True"
-    SECRET_KEY = os.getenv("FLASK_SECRET_KEY").encode()
-
-    if not SECRET_KEY:
-        raise Exception("FLASK_SECRET_KEY not set")
-
-    app.secret_key = SECRET_KEY
-    app.run(host="0.0.0.0", debug=DEBUG)
+    config = FlaskConfig()
+    app.config.from_object(config)
+    app.run(host="0.0.0.0", port=5000)
