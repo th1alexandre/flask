@@ -4,11 +4,6 @@ from sqlalchemy import create_engine
 
 
 def engine_default(pool_size=None, max_overflow=None):
-    """Create a SQLAlchemy engine for the default database.
-
-    Returns:
-        sqlalchemy.engine.Engine: A SQLAlchemy engine.
-    """
     try:
         user = os.getenv("POSTGRES_USER", "postgres")
         password = os.getenv("POSTGRES_PASSWORD", "postgres")
