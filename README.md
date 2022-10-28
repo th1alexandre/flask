@@ -11,3 +11,9 @@
 ### Create Python Virtual Environment
 - Download and install [Python](https://www.python.org/downloads/) with your desired version
 - Run `python<version> -m venv .venv` to create a new python virtual environment
+
+### Install project dependencies
+- Activate your virtual environment `.venv`
+- Run `pip install poetry` and `poetry install --only main`
+- After installing main dependencies, install dev dependencies
+- Run `poetry install --only dev` and `pre-commit install`
