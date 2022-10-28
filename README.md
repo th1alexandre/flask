@@ -13,6 +13,8 @@
 ### Create Python Virtual Environment
 - Download and install [Python](https://www.python.org/downloads/) with your desired version
 - Run `python<version> -m venv .venv` to create a new python virtual environment
+- - You can choose other names than `.venv`, just be careful to avoid conflicts with `.env` file
+- - Check [this docs](https://docs.python.org/3/library/venv.html) for more info about using venv module
 
 ### Install project dependencies
 - Activate your virtual environment `.venv`
