@@ -7,6 +7,8 @@
 - Create a new file named `.env` in the root folder
 - Copy the content of the `.env.dev` file to the new `.env`
 - Update the variable values with your preferences
+- - When adding new keys, remember to pass it to `docker-compose.yml` and `.env.dev`
+- - This helps others developers configuring and updating their development environment
 
 ### Create Python Virtual Environment
 - Download and install [Python](https://www.python.org/downloads/) with your desired version
