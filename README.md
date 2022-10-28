@@ -1,3 +1,8 @@
+### Configure your SSH and GPG Keys
+These steps are not required, but highly recommended
+- Connect to GitHub using the [Secure Shell Protocol](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+- Use [GPG Keys](https://docs.github.com/en/authentication/managing-commit-signature-verification) to configure commit signature
+
 ### Install Docker
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) or...
 - - [Docker Engine](https://docs.docker.com/engine/install/)
