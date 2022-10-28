@@ -1,3 +1,5 @@
+## Configuring Your Development Environment
+
 ### Configure your SSH and GPG Keys
 These steps are not required, but highly recommended
 - Connect to GitHub using the [Secure Shell Protocol](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
