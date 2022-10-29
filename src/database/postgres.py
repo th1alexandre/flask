@@ -2,6 +2,7 @@ import os
 
 import psycopg
 from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
 
 
 def _connect_pg(
@@ -20,8 +21,11 @@ def _connect_pg(
         raise Exception(f"Error connecting to PostgreSQL: {e}")
 
 
-def conn_postgres(**kwargs):
+def conn_postgres(engine: Engine = None, **kwargs):
     try:
+        if engine:
+            return engine.connect()
+
         user = os.getenv("POSTGRES_USER", "postgres")
         password = os.getenv("POSTGRES_PASSWORD", "postgres")
         host = os.getenv("POSTGRES_HOST", "postgres")
