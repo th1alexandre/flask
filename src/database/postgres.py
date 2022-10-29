@@ -5,17 +5,22 @@ from sqlalchemy import create_engine
 
 
 def _connect_pg(
-    user: str, password: str, host: str, port: int, database: str
+    user: str, password: str, host: str, port: int, database: str, **kwargs
 ) -> psycopg.Connection:
     try:
         return psycopg.connect(
-            user=user, password=password, host=host, port=port, database=database
+            user=user,
+            password=password,
+            host=host,
+            port=port,
+            database=database,
+            **kwargs,
         )
     except Exception as e:
         raise Exception(f"Error connecting to PostgreSQL: {e}")
 
 
-def conn_postgres():
+def conn_postgres(**kwargs):
     try:
         user = os.getenv("POSTGRES_USER", "postgres")
         password = os.getenv("POSTGRES_PASSWORD", "postgres")
@@ -24,13 +29,18 @@ def conn_postgres():
         database = os.getenv("POSTGRES_DB", "flask")
 
         return _connect_pg(
-            user=user, password=password, host=host, port=int(port), database=database
+            user=user,
+            password=password,
+            host=host,
+            port=int(port),
+            database=database,
+            **kwargs,
         )
     except Exception as e:
         raise Exception(f"Error while getting PG connection: {e}")
 
 
-def engine_postgres(pool_size=None, max_overflow=None):
+def engine_postgres(pool_size=None, max_overflow=None, **kwargs):
     try:
         user = os.getenv("POSTGRES_USER", "postgres")
         password = os.getenv("POSTGRES_PASSWORD", "postgres")
@@ -46,6 +56,8 @@ def engine_postgres(pool_size=None, max_overflow=None):
 
         url = f"postgresql+psycopg://{user}:{password}@{host}:{port}/{database}"
 
-        return create_engine(url, pool_size=pool_size, max_overflow=max_overflow)
+        return create_engine(
+            url, pool_size=pool_size, max_overflow=max_overflow, **kwargs
+        )
     except Exception as e:
         raise Exception(f"Error while creating PG engine: {e}")
