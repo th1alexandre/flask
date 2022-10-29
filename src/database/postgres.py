@@ -1,15 +1,15 @@
 import os
 
-import psycopg
+import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
 
 def _connect_pg(
     user: str, password: str, host: str, port: int, database: str, **kwargs
-) -> psycopg.Connection:
+):
     try:
-        return psycopg.connect(
+        return psycopg2.connect(
             user=user,
             password=password,
             host=host,
@@ -58,7 +58,7 @@ def engine_postgres(pool_size=None, max_overflow=None, **kwargs):
         if not max_overflow:
             max_overflow = os.getenv("POSTGRES_MAX_OVERFLOW", 10)
 
-        url = f"postgresql+psycopg://{user}:{password}@{host}:{port}/{database}"
+        url = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
 
         return create_engine(
             url, pool_size=pool_size, max_overflow=max_overflow, **kwargs
