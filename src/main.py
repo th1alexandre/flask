@@ -1,4 +1,5 @@
 from config import FlaskConfig
+from error import initialize_error_handlers
 from flask import Flask
 from swagger import initialize_flasgger
 
@@ -8,6 +9,7 @@ def create_app():
         app = Flask(__name__)
 
         initialize_flasgger(app)
+        initialize_error_handlers(app)
 
         config = FlaskConfig()
         app.config.from_object(config)
