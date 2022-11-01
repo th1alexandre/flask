@@ -1,7 +1,9 @@
 from flask import Flask, jsonify
+from library.exceptions import BaseException
 
 
 def initialize_error_handlers(app: Flask):
+    app.register_error_handler(BaseException, exception_handler)
     app.register_error_handler(400, handle_400)
     app.register_error_handler(401, handle_401)
     app.register_error_handler(403, handle_403)
@@ -10,6 +12,10 @@ def initialize_error_handlers(app: Flask):
     app.register_error_handler(409, handle_409)
     app.register_error_handler(412, handle_412)
     app.register_error_handler(500, handle_500)
+
+
+def exception_handler(e):
+    return jsonify(error=str(e)), e.status_code
 
 
 def handle_400(e):
