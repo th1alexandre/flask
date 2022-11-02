@@ -2,7 +2,9 @@ from flask import jsonify
 
 
 def exception_handler(e):
-    return jsonify(error=str(e)), e.status_code
+    if isinstance(e, BaseException):
+        return jsonify(error=str(e)), e.status_code
+    return jsonify(error="Internal Server Error"), 500
 
 
 class BaseException(Exception):
