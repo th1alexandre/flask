@@ -9,10 +9,9 @@ def create_app():
         app = Flask(__name__)
 
         initialize_flasgger(app)
-        app.register_error_handler(BaseException, exception_handler)
 
-        config = FlaskConfig()
-        app.config.from_object(config)
+        app.config.from_object(FlaskConfig())
+        app.register_error_handler(BaseException, exception_handler)
 
         return app
     except Exception as e:
