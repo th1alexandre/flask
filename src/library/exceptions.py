@@ -1,3 +1,10 @@
+from flask import jsonify
+
+
+def exception_handler(e):
+    return jsonify(error=str(e)), e.status_code
+
+
 class BaseException(Exception):
     def __init__(self, message, status_code):
         self.status_code = status_code

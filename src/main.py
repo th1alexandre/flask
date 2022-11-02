@@ -1,6 +1,6 @@
 from config import FlaskConfig
-from error import initialize_error_handlers
 from flask import Flask
+from library.exceptions import BaseException, exception_handler
 from swagger import initialize_flasgger
 
 
@@ -9,7 +9,7 @@ def create_app():
         app = Flask(__name__)
 
         initialize_flasgger(app)
-        initialize_error_handlers(app)
+        app.register_error_handler(BaseException, exception_handler)
 
         config = FlaskConfig()
         app.config.from_object(config)
