@@ -64,7 +64,7 @@ def conn_postgres(engine: Engine = None, **kwargs):
             **kwargs,
         )
     except Exception as e:
-        raise Exception(f"Error while getting PG connection: {e}")
+        raise Exception(f"Error connecting to PostgreSQL: {e}")
 
 
 def engine_postgres(pool_size=None, max_overflow=None, **kwargs):
