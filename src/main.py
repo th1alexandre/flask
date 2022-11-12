@@ -1,4 +1,5 @@
 from config import FlaskConfig
+from database.postgres import initialize_sqlalchemy
 from flask import Flask
 from library.exceptions import exception_handler
 from swagger import initialize_flasgger
@@ -8,6 +9,7 @@ def create_app():
     try:
         app = Flask(__name__)
 
+        initialize_sqlalchemy(app)
         initialize_flasgger(app)
 
         app.config.from_object(FlaskConfig())

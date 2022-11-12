@@ -1,8 +1,31 @@
 import os
 
 import psycopg2
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
+
+db = SQLAlchemy()
+
+
+def initialize_sqlalchemy(app):
+    try:
+        user = os.getenv("POSTGRES_USER", "postgres")
+        password = os.getenv("POSTGRES_PASSWORD", "postgres")
+        host = os.getenv("POSTGRES_HOST", "postgres")
+        port = os.getenv("POSTGRES_PORT", 5432)
+        database = os.getenv("POSTGRES_DB", "flask")
+
+        SQLALCHEMY_DATABASE_URI = (
+            f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+        )
+
+        app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+        app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+        db.init_app(app)
+    except Exception as e:
+        raise Exception(f"Error while initializing SQLAlchemy: {e}")
 
 
 def _connect_pg(
