@@ -1,3 +1,7 @@
+Example of YAML for API documentation.
+Use 'from flasgger import swag_from'
+and '@swag_from("your_file.yaml")'
+---
 summary: Summary
 description: Description
 tags:
