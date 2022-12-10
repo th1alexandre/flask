@@ -1,6 +1,6 @@
 import os
 
-import psycopg2
+import psycopg
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
@@ -17,7 +17,7 @@ def initialize_sqlalchemy(app):
         database = os.getenv("POSTGRES_DB", "flask")
 
         SQLALCHEMY_DATABASE_URI = (
-            f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+            f"postgresql+psycopg://{user}:{password}@{host}:{port}/{database}"
         )
 
         app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
@@ -32,12 +32,12 @@ def _connect_pg(
     user: str, password: str, host: str, port: int, database: str, **kwargs
 ):
     try:
-        return psycopg2.connect(
+        return psycopg.connect(
             user=user,
             password=password,
             host=host,
             port=port,
-            database=database,
+            dbname=database,
             **kwargs,
         )
     except Exception as e:
@@ -81,7 +81,7 @@ def engine_postgres(pool_size=None, max_overflow=None, **kwargs):
         if not max_overflow:
             max_overflow = os.getenv("POSTGRES_MAX_OVERFLOW", 10)
 
-        url = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+        url = f"postgresql+psycopg://{user}:{password}@{host}:{port}/{database}"
 
         return create_engine(
             url, pool_size=pool_size, max_overflow=max_overflow, **kwargs
