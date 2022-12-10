@@ -2,9 +2,11 @@ from uuid import uuid4
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
-Base = declarative_base()
+
+class Base(DeclarativeBase):
+    pass
 
 
 # SQLAlchemy table template
