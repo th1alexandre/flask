@@ -9,7 +9,6 @@ class Base(DeclarativeBase):
     pass
 
 
-# SQLAlchemy table template
 class TableA(Base):
     __tablename__ = "table_a"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
