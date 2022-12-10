@@ -25,7 +25,7 @@ services:
       - ./tests:/app/tests
 
   postgres:
-    image: postgres:14
+    image: postgres:15
     user: postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
