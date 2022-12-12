@@ -1,3 +1,17 @@
+// My personal recommendation for database design is dbdiagram.io
+// Go to https://dbdiagram.io/home and start modeling your database
+// It's free*, easy to use and has a lot of documentation**
+//
+// You can also export your .dbml diagram as a PostgreSQL file (.sql)
+// Use this exported .sql file to create your initdb.sql***
+// 
+// *   https://dbdiagram.io/pricing
+// **  https://dbdiagram.io/docs/
+// *** "Initialization scripts" at https://hub.docker.com/_/postgres
+
+// Below is a sample .dbml file from dbdiagram.io
+
+
 //// -- LEVEL 1
 //// -- Schemas, Tables and References
 
