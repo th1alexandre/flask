@@ -11,6 +11,10 @@ inputs:
     required: false
     default: 'ci[ACTION]: create-pull-request'
     type: string
+  branch-prefix:
+    description: Prefix to be used while creating a new branch
+    required: true
+    type: string
 runs:
   using: 'composite'
   steps:
@@ -23,4 +27,23 @@ runs:
       run: |
         git add ${{ inputs.files-to-commit }}
         git commit --no-verify -m "${{ inputs.commit-message }}"
+      shell: bash
+    - name: Get short commit hash
+      id: short-hash
+      run: echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      shell: bash
+    - name: Set branch name
+      id: branch-name
+      run: |
+        branch_prefix=${{ inputs.branch-prefix }}
+        branch_sufix=${{ steps.short-hash.outputs.hash }}
+        branch_name="${branch_prefix}-${branch_sufix}"
+        echo "branch=${branch_name}" >> $GITHUB_OUTPUT
+      shell: bash
+    - name: Create a new branch and push to origin
+      env:
+        NEW_BRANCH_NAME: ${{ steps.branch-name.outputs.branch }}
+      run: |
+        git checkout -b ${{ env.NEW_BRANCH_NAME }}
+        git push -u origin ${{ env.NEW_BRANCH_NAME }}
       shell: bash
