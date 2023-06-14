@@ -15,6 +15,22 @@ inputs:
     description: Prefix to be used while creating a new branch
     required: true
     type: string
+  pr-title:
+    description: Title of the new Pull Request
+    required: true
+    type: string
+  pr-template:
+    description: Template to be used as body of the Pull Request
+    required: true
+    type: string
+  pr-reviewer:
+    description: Reviewer(s) of the Pull Request
+    required: true
+    type: string
+  pr-assignee:
+    description: Assignee(s) of the Pull Request
+    required: true
+    type: string
 runs:
   using: 'composite'
   steps:
@@ -46,4 +62,13 @@ runs:
       run: |
         git checkout -b ${{ env.NEW_BRANCH_NAME }}
         git push -u origin ${{ env.NEW_BRANCH_NAME }}
+      shell: bash
+    - name: Create a new Pull Request
+      run: |
+        gh pr create \
+          --title "${{ inputs.pr-title }}" \
+          --body-file ${{ inputs.pr-template }} \
+          --reviewer ${{ inputs.pr-reviewer }} \
+          --assignee ${{ inputs.pr-assignee }} \
+          --fill
       shell: bash
