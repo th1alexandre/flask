@@ -3,5 +3,8 @@ description: Commit changes to a new branch and creates a new Pull Request
 runs:
   using: 'composite'
   steps:
-    - name: Create Pull Request
-      run: echo "New Pull Request"
+    - name: Configure commit author
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+      shell: bash
