@@ -1,5 +1,16 @@
 name: Create Pull Request
 description: Commit changes to a new branch and creates a new Pull Request
+inputs:
+  files-to-commit:
+    description: Files to be committed, all if not specified
+    required: false
+    default: '.'
+    type: string
+  commit-message:
+    description: Commit message to be used in the workflow run
+    required: false
+    default: 'ci[ACTION]: create-pull-request'
+    type: string
 runs:
   using: 'composite'
   steps:
@@ -7,4 +18,9 @@ runs:
       run: |
         git config user.name 'github-actions[bot]'
         git config user.email 'github-actions[bot]@users.noreply.github.com'
+      shell: bash
+    - name: Commit changes
+      run: |
+        git add ${{ inputs.files-to-commit }}
+        git commit --no-verify -m "${{ inputs.commit-message }}"
       shell: bash
