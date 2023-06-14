@@ -1,0 +1,7 @@
+name: Create Pull Request
+description: Commit changes to a new branch and creates a new Pull Request
+runs:
+  using: 'composite'
+  steps:
+    - name: Create Pull Request
+      run: echo "New Pull Request"
