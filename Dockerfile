@@ -1,5 +1,5 @@
 ### Base stage, load environment variables
-FROM python:3.11-slim-bullseye as python-base
+FROM python:3.11-slim-bookworm as python-base
 
 # Python envs
 ENV PYTHONDONTWRITEBYTECODE=1 \
