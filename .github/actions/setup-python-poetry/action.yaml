@@ -9,7 +9,7 @@ inputs:
   poetry-version:
     description: Desired poetry version
     required: false
-    default: '1.3.0'
+    default: '1.5.1'
     type: string
 runs:
   using: composite
