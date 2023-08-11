@@ -1,5 +1,5 @@
 name: Create Pull Request
-description: Commit changes to a new branch and creates a new Pull Request
+description: Commit changes to a new branch and creates a new Pull Request, bot account (GPG key) is required to sign commits
 inputs:
   files-to-commit:
     description: Files to be committed, all if not specified
@@ -31,18 +31,34 @@ inputs:
     description: Assignee(s) of the Pull Request
     required: true
     type: string
+  BOT_GPG_PRIVATE_KEY:
+    description: Bot account's GPG private key
+    required: true
+    type: string
+  BOT_GPG_PASSPHRASE:
+    description: Bot's GPG passphrase, required to access the private key
+    required: true
+    type: string
 runs:
   using: 'composite'
   steps:
-    - name: Configure commit author
-      run: |
-        git config user.name 'github-actions[bot]'
-        git config user.email 'github-actions[bot]@users.noreply.github.com'
-      shell: bash
+    - name: Import bot's GPG key for signing commits
+      id: import-gpg
+      uses: crazy-max/ghaction-import-gpg@v5
+      with:
+        gpg_private_key: ${{ inputs.BOT_GPG_PRIVATE_KEY }}
+        passphrase: ${{ inputs.BOT_GPG_PASSPHRASE }}
+        git_user_signingkey: true
+        git_commit_gpgsign: true
     - name: Commit changes
       run: |
         git add ${{ inputs.files-to-commit }}
         git commit --no-verify -m "${{ inputs.commit-message }}"
+      env:
+        GIT_AUTHOR_NAME: ${{ steps.import-gpg.outputs.name }}
+        GIT_AUTHOR_EMAIL: ${{ steps.import-gpg.outputs.email }}
+        GIT_COMMITTER_NAME: ${{ steps.import-gpg.outputs.name }}
+        GIT_COMMITTER_EMAIL: ${{ steps.import-gpg.outputs.email }}
       shell: bash
     - name: Get short commit hash
       id: short-hash
